@@ -60,14 +60,12 @@ def extract_text_from_pdf(file_path):
     return text
 
 def calculate_rejection_probability(application_data):
-    # Detect base rate based on citizenship
     citizenship = application_data.get("citizenship", "").lower()
     if citizenship == "uzbekistan":
         base_probability = 64.41
     else:
-        base_probability = 20.0  # Default base rate for others
+        base_probability = 20.0
 
-    # Factors affecting probability
     factors = {
         "insufficient_funds": {
             "weight": 15.0,
@@ -111,11 +109,9 @@ def calculate_rejection_probability(application_data):
         }
     }
 
-    # Financial check
     if application_data.get("financial_support") in ["minimal", "none", "unclear"]:
         factors["insufficient_funds"]["present"] = True
 
-    # Home country ties
     home_ties_score = 0
     if application_data.get("has_job_in_home_country"):
         home_ties_score += 1
@@ -126,7 +122,6 @@ def calculate_rejection_probability(application_data):
     if home_ties_score < 2:
         factors["weak_home_ties"]["present"] = True
 
-    # Purpose clarity
     if not application_data.get("clear_purpose_statement"):
         factors["unclear_purpose"]["present"] = True
 
@@ -183,7 +178,7 @@ def call_openrouter_api(messages, temperature=0.2, max_tokens=2000):
     }
 
     try:
-        response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload)
+        response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload, timeout=10)
         response.raise_for_status()
         result = response.json()
         return result["choices"][0]["message"]["content"]
@@ -290,5 +285,5 @@ def analyze():
     result = analyze_visa_application(form_data, pdf_texts)
     return jsonify(result)
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+if __name__ == "main":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
