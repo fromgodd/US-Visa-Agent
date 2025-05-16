@@ -23,6 +23,7 @@ multidict==6.4.3
 openai==0.28.0
 openpyxl==3.1.5
 pip==24.3.1
+gunicorn
 propcache==0.3.1
 pydantic==2.11.1
 pydantic-core==2.33.0
