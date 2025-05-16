@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisaAssist - USA Visa Application Analysis</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.5;
+        }
+        .header {
+            background-color: #112e51;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            border-bottom: 4px solid #d6d7d9;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            width: 85%;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border: 1px solid #d6d7d9;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .intro {
+            background-color: #f1f1f1;
+            border: 1px solid #d6d7d9;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #205493;
+            border-bottom: 2px solid #d6d7d9;
+            padding-bottom: 5px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #5b616b;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        button {
+            background-color: #205493;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        button:hover {
+            background-color: #112e51;
+        }
+        .form-section {
+            margin-bottom: 25px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #d6d7d9;
+        }
+        .section-header {
+            background-color: #f1f1f1;
+            padding: 8px;
+            margin: -10px -10px 10px -10px;
+            border-bottom: 1px solid #d6d7d9;
+            font-weight: bold;
+        }
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #d6d7d9;
+            background-color: #f9f9f9;
+        }
+        .probability-meter {
+            height: 30px;
+            background-color: #e0e0e0;
+            position: relative;
+            margin: 20px 0;
+        }
+        .probability-fill {
+            height: 100%;
+            background-color: #ff9e80;
+            width: 0%;
+            transition: width 1s;
+        }
+        .probability-label {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-weight: bold;
+        }
+        .usa-flag {
+            width: 30px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .mandatory {
+            color: red;
+        }
+        .recommendation {
+            background-color: #e1f3f8;
+            border-left: 4px solid #02bfe7;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #fff1d2;
+            border-left: 4px solid #fdb81e;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        footer {
+            background-color: #323a45;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 12px;
+            margin-top: 30px;
+        }
+        @media print {
+            .container {
+                box-shadow: none;
+                border: none;
+            }
+            button, .intro {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABLUlEQVR4nO2WTU7DMBCFXwpLlFMgkCguQRE3KFfgGNyBRbkC94AV0+4QUnQRusIUSzSKRzMgNamhSRzJVuuRRrH9ZvzFsj0TLVvYwWtSdQJ8AYMaehOWnGmXkQNOOb9TLuwzEqXYj4A74Ar4qQgu9QN8AHfAcxk8B3bLrJhkCYqzDTwAH0Bm0kd5+pIEo9J2V5bJNXAvB3bADfDmEN4Df2aQo0L5T8BVRE7AXp6nbYmSNPCi0qo0a6Bnx76PNHDBYpxH5Md9+G7D4NMwMG4YOA0DXy8F1u28zsFnLnCuLwYyRRGkUFbL0KGBB0WRX2DfkTtvCQ4GXUlc5MsxcLwsT0oZO0AKnAAF7xXg1dKPIydQyPE8EWTUMvS/1DX40j3WmQZuRrTbKL9ry1b8ASc9OLXg3oUDAAAAAElFTkSuQmCC" class="usa-flag" alt="US flag">VisaAssist - USA Visa Application Analysis</h1>
+    </div>
+    
+    <div class="container">
+        <div class="intro">
+            <p><strong>CONFIDENTIAL ANALYSIS TOOL</strong>: This application provides an AI-assisted analysis of your USA visa application. Your information is processed locally and is not stored on any server. This tool is designed to identify potential issues and provide recommendations to improve your chances of visa approval.</p>
+        </div>
+        
+        <form id="visa-form" enctype="multipart/form-data">
+            <div class="form-section">
+                <div class="section-header">Applicant Information</div>
+                <label for="full_name">Full Name <span class="mandatory">*</span></label>
+                <input type="text" id="full_name" name="full_name" required>
+                
+                <label for="citizenship">Country of Citizenship <span class="mandatory">*</span></label>
+                <input type="text" id="citizenship" name="citizenship" required>
+                
+                <label for="age">Age <span class="mandatory">*</span></label>
+                <input type="number" id="age" name="age" min="1" max="120" required>
+                
+                <label for="occupation">Current Occupation <span class="mandatory">*</span></label>
+                <input type="text" id="occupation" name="occupation" required>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">Visa Application Details</div>
+                <label for="visa_type">Visa Type <span class="mandatory">*</span></label>
+                <select id="visa_type" name="visa_type" required>
+                    <option value="">Select Visa Type</option>
+                    <option value="J1">J-1 Exchange Visitor</option>
+                    <option value="B1/B2">B-1/B-2 Business/Tourist</option>
+                    <option value="F1">F-1 Student</option>
+                    <option value="H1B">H-1B Work Visa</option>
+                    <option value="O1">O-1 Extraordinary Ability</option>
+                    <option value="L1">L-1 Intracompany Transfer</option>
+                </select>
+                
+                <label for="purpose">Purpose of Visit <span class="mandatory">*</span></label>
+                <textarea id="purpose" name="purpose" rows="3" required></textarea>
+                
+                <label for="length_of_stay">Intended Length of Stay (months) <span class="mandatory">*</span></label>
+                <input type="number" id="length_of_stay" name="length_of_stay" min="1" max="240" required>
+                
+                <label for="previous_visits">Previous Visits to USA</label>
+                <select id="previous_visits" name="previous_visits">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+                
+                <label for="previous_denials">Previous Visa Denials</label>
+                <select id="previous_denials" name="previous_denials">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">Financial Information</div>
+                <label for="monthly_income">Monthly Income (USD) <span class="mandatory">*</span></label>
+                <input type="number" id="monthly_income" name="monthly_income" min="0" step="100" required>
+                
+                <label for="savings">Available Savings (USD) <span class="mandatory">*</span></label>
+                <input type="number" id="savings" name="savings" min="0" step="100" required>
+                
+                <label for="financial_documentation">Financial Support Documentation</label>
+                <select id="financial_documentation" name="financial_documentation">
+                    <option value="Complete">Complete - Bank statements, sponsor letters, proof of income</option>
+                    <option value="Partial">Partial - Some documentation available</option>
+                    <option value="Minimal">Minimal - Limited financial documentation</option>
+                    <option value="None">None - No financial documentation</option>
+                </select>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">Ties to Home Country</div>
+                <label for="job_home_country">Current Job in Home Country</label>
+                <select id="job_home_country" name="job_home_country">
+                    <option value="Permanent position">Permanent position</option>
+                    <option value="Temporary position">Temporary position</option>
+                    <option value="Self-employed">Self-employed</option>
+                    <option value="Student">Student</option>
+                    <option value="Unemployed">Unemployed</option>
+                    <option value="Retired">Retired</option>
+                </select>
+                
+                <label for="property_ownership">Property Ownership in Home Country</label>
+                <select id="property_ownership" name="property_ownership">
+                    <option value="Own home">Own home</option>
+                    <option value="Own multiple properties">Own multiple properties</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Live with family">Live with family</option>
+                    <option value="Other">Other</option>
+                </select>
+                
+                <label for="family_ties">Family Ties in Home Country</label>
+                <select id="family_ties" name="family_ties">
+                    <option value="Immediate family">Immediate family (spouse, children)</option>
+                    <option value="Extended family">Extended family only</option>
+                    <option value="Minimal">Minimal family ties</option>
+                    <option value="None">No family ties</option>
+                </select>
+            </div>
+            
+            <div class="form-section j1-section" style="display: none;">
+                <div class="section-header">J-1 Visa Specific Information</div>
+                <label for="program_category">Program Category</label>
+                <select id="program_category" name="program_category">
+                    <option value="">Select Program Category</option>
+                    <option value="Research Scholar">Research Scholar</option>
+                    <option value="Short-term Scholar">Short-term Scholar</option>
+                    <option value="Specialist">Specialist</option>
+                    <option value="Intern">Intern</option>
+                    <option value="Trainee">Trainee</option>
+                    <option value="College/University Student">College/University Student</option>
+                    <option value="Professor">Professor</option>
+                    <option value="Physician">Physician</option>
+                    <option value="Summer Work Travel">Summer Work Travel</option>
+                    <option value="Camp Counselor">Camp Counselor</option>
+                    <option value="Au Pair">Au Pair</option>
+                </select>
+                
+                <label for="sponsor">Sponsoring Organization</label>
+                <input type="text" id="sponsor" name="sponsor">
+                
+                <label for="ds2019_issued">DS-2019 Form Issued</label>
+                <select id="ds2019_issued" name="ds2019_issued">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="In process">In process</option>
+                </select>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">Document Upload</div>
+                <label for="documents">Upload PDF Documents (DS-160, DS-2019, etc.)</label>
+                <input type="file" id="documents" name="documents" multiple accept=".pdf">
+                <p style="font-size: 12px; color: #666;">Upload relevant visa application documents in PDF format. These will be analyzed locally for a more accurate assessment.</p>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-header">Interview Preparation</div>
+                <label for="interview_practice">Interview Preparation Level</label>
+                <select id="interview_practice" name="interview_practice">
+                    <option value="Extensive">Extensive - Mock interviews and thorough research</option>
+                    <option value="Moderate">Moderate - Some preparation</option>
+                    <option value="Minimal">Minimal - Limited preparation</option>
+                    <option value="None">None - No preparation yet</option>
+                </select>
+                
+                <label for="clear_purpose_statement">Clear Purpose Statement Prepared</label>
+                <select id="clear_purpose_statement" name="clear_purpose_statement">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="In progress">In progress</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="analyze-btn">Analyze Application</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <p>Analyzing your application... Please wait.</p>
+            <div style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; margin: 20px auto; animation: spin 2s linear infinite;"></div>
+        </div>
+        
+        <div class="result" id="result">
+            <h2>Visa Application Analysis</h2>
+            <div id="analysis-result"></div>
+            
+            <div>
+                <h3>Rejection Probability Assessment</h3>
+                <div class="probability-meter">
+                    <div class="probability-fill" id="probability-fill"></div>
+                    <div class="probability-label" id="probability-label">0%</div>
+                </div>
+                <p style="font-size: 12px; color: #666;">Calculated using our proprietary algorithm based on historical visa application outcomes.</p>
+                <p style="font-size: 12px; color: #666;" id="probability-formula"></p>
+            </div>
+            
+            <div class="warning">
+                <p><strong>DISCLAIMER:</strong> This analysis is for informational purposes only and does not guarantee visa approval or denial. Consult with a qualified immigration attorney for legal advice.</p>
+            </div>
+            
+            <button onclick="window.print()">Print Analysis</button>
+            <button onclick="document.getElementById('result').style.display = 'none'; document.getElementById('visa-form').reset();">Start New Analysis</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>VisaAssist - Helping you navigate the US visa application process</p>
+        <p>This tool does not store or transmit your personal data to any external servers. All processing is done locally.</p>
+    </footer>
+    
+    <script>
+        // Show/hide J-1 specific section based on visa type selection
+        document.getElementById('visa_type').addEventListener('change', function() {
+            const j1Section = document.querySelector('.j1-section');
+            if (this.value === 'J1') {
+                j1Section.style.display = 'block';
+            } else {
+                j1Section.style.display = 'none';
+            }
+        });
+        
+        // Form submission handler
+        document.getElementById('visa-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading indicator
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            // Create FormData object
+            const formData = new FormData(this);
+            
+            // Add computed fields for algorithm
+            formData.append('has_job_in_home_country', 
+                formData.get('job_home_country') !== 'Unemployed' ? true : false);
+            formData.append('owns_property_in_home_country', 
+                (formData.get('property_ownership') === 'Own home' || formData.get('property_ownership') === 'Own multiple properties') ? true : false);
+            formData.append('has_family_in_home_country', 
+                (formData.get('family_ties') === 'Immediate family' || formData.get('family_ties') === 'Extended family') ? true : false);
+            formData.append('financial_support', formData.get('financial_documentation'));
+            formData.append('previous_visa_rejections', formData.get('previous_denials') === 'Yes');
+            formData.append('visa_violations', false); // Default value
+            
+            // Convert boolean strings to booleans
+            const boolFields = ['has_job_in_home_country', 'owns_property_in_home_country', 'has_family_in_home_country', 'previous_visa_rejections', 'visa_violations'];
+            boolFields.forEach(field => {
+                if (formData.has(field)) {
+                    formData.set(field, formData.get(field) === 'true');
+                }
+            });
+
+            // Send AJAX request
+            fetch('/analyze', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading indicator
+                document.getElementById('loading').style.display = 'none';
+                
+                // Display results
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('analysis-result').innerHTML = data.analysis.replace(/\n/g, '<br>').replace(/^\s*([A-Z\s]+):/gm, '<strong>$1:</strong>');
+                
+                // Set probability meter
+                const probability = data.rejection_probability.probability;
+                document.getElementById('probability-fill').style.width = probability + '%';
+                document.getElementById('probability-label').textContent = probability + '%';
+                
+                // Color code based on probability
+                const fill = document.getElementById('probability-fill');
+                if (probability < 30) {
+                    fill.style.backgroundColor = '#4CAF50'; // Green
+                } else if (probability < 60) {
+                    fill.style.backgroundColor = '#FFC107'; // Yellow
+                } else {
+                    fill.style.backgroundColor = '#F44336'; // Red
+                }
+                
+                // Show formula
+                document.getElementById('probability-formula').textContent = 'Formula: ' + data.rejection_probability.formula;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                alert('An error occurred during analysis. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
