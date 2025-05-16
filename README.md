@@ -102,5 +102,12 @@ Made with love and skepticism by a math-loving Rust-enjoyer named Valera ðŸ‡ºðŸ‡
 
 ```diff
 + Pull requests are welcome
++ TODO - Fine tune for better results!
 - Dumb visa denials are not
 ```
+## Screenshots
+
+![{66832B7A-7974-4074-9028-6DBAA896F38D}](https://github.com/user-attachments/assets/dd97aec2-1da9-4f10-a944-7ebada1abaa2)
+
+![{B552203C-D188-4A83-B706-BA5BFC40F3A5}](https://github.com/user-attachments/assets/6ad86c48-cadb-4db1-8b56-cc2bea7524f5)
+
